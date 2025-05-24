@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
+{% block title %} Blogs {% endblock %}
+{% block content %}
+
+<h1>Blogs <span class="welcome-message">Welcome, {{ request.user.username }}</span></h1>
+
+<form class="search-b" method="GET" action="{% url 'blogs' %}" id="blogsearch">
+    <input class="search-inputs" type="search" name="blogsearch" placeholder="Search">
+    <button class="button-b" type="submit">Search</button>
+    <button class="button-b" type="reset" onclick="location.href='{% url 'blogs' %}'">Reset</button>
+</form>
+
+<h2>
+    {% for car in cars %}
+        <img src="{{ car.image.url }}" alt="Car Image" width="300" height="168">
+        {{ car.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'comments' car_id=car.id %}">See Comments</a><br>
+    {% endfor %}
+</h2>
+
+{% endblock %}

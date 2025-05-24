@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
+{% block title %} User Login {% endblock %}
+
+{% block content %}
+<h1 class="login-header">User Login</h1>
+<div class="login">
+    <div class="form">
+        <form class="login-form" action="/users/login/" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

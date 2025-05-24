@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+{% endblock %}
+
+{% block title %} Comments {% endblock %}
+{% block content %}
+
+<h1>{{ car.name }}</h1>
+<div class="slideshow-container">
+  <div class="mySlides">
+    <img src="{{ car.image.url }}" width="700" height="400">
+  </div>
+
+  <div class="mySlides">
+    <img src="{{ car.image2.url }}" width="700" height="400">
+  </div>
+
+  <div class="mySlides">
+    <img src="{{ car.image3.url }}" width="700" height="400">
+  </div>
+
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+
+
+<div class="container bootstrap snippets bootdey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="blog-comment">
+                <h3 class="text-success ">Comments</h3>
+                <hr/>
+                <ul class="comments">
+                    {% for comment in comments %}
+                    <li class="clearfix">
+                        <div class="post-comments">
+                            <p class="meta">Posted on {{ comment.created_at }} <b>{{ comment.user.username }}</b> says:</p>
+                            <p>
+                                {{ comment.content }}
+                            </p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container bootstrap snippets bootdey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="blog-comment-form">
+                <h2 class="text-success">Add a comment</h2>
+                <h3>Name: {{ request.user.username }}</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_content">Comment:</label>
+                        <textarea class="form-control" id="id_content" name="content" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function showSlides(n) {
+  let i;
+  let x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+</script>
+
+
+{% endblock %}

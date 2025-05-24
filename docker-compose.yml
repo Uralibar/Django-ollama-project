@@ -1,0 +1,60 @@
+name: my-docker-project
+
+services:
+  app:
+    build: .
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    image: my-docker-image
+    container_name: my-docker-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/carapp
+    depends_on:
+      - db
+      - ollama
+    environment:
+      - AWS_ACCESS_KEY_ID=AKIATG6MG3LBDWKOWBWH
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_STORAGE_BUCKET_NAME=uralawsbucket
+      - AWS_S3_REGION_NAME=eu-north-1
+      - OLLAMA_LOCATION=http://ollama:11434
+  db:
+    image: postgres:alpine
+    container_name: my-postgres-container
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    restart: always
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+  celery:
+    build: .
+    command: celery -A carapp worker --loglevel=info
+    depends_on:
+      - redis
+      - app
+    volumes:
+      - .:/carapp
+    environment:
+      - AWS_ACCESS_KEY_ID=AKIATG6MG3LBDWKOWBWH
+      - AWS_SECRET_ACCESS_KEY=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,
+      - AWS_STORAGE_BUCKET_NAME=uralawsbucket,
+      - AWS_S3_REGION_NAME=eu-north-1,
+      - OLLAMA_LOCATION=http://ollama:11434/
+volumes:
+  postgres_data:
+  ollama_data:

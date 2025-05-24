@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block title %} Chat {% endblock %}
+{% block content %}
+
+<!-- result.html -->
+<h1>Cars Detected from Your Request</h1>
+
+<p><strong>Your Request:</strong> {{ user_request }}</p>
+<p><strong>Detected Car Type:</strong> {{ detected_types }}</p>
+<p><strong>Detected Price Range:</strong> {{ price_range }}</p>
+
+<h2>Cars of Type: {{ detected_types }}</h2>
+
+<ul>
+    {% for car in cars %}
+        <li>{{ car.name }} - {{ car.price }} - {{ car.type }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'chat_with_ollama' %}">Ask again</a>
+
+<form method="get" id="form" action="{% url 'chat_with_ollama' %}">
+    <!-- Hidden inputs to store sorting parameters and user request -->
+    <input type="hidden" id="user_request" name="user_request" value="{{ user_request }}">
+    <input type="hidden" id="what" name="what" value="{{ what }}">
+    <input type="hidden" id="isAsc" name="isAsc" value="{{ isAsc }}">
+
+    <table>
+        <tr>
+            <th>Image</th>
+            <th>
+                <button type="submit" name="what" value="name" onclick="submitForm('name')">Name
+                    {% if what == "name" %}
+                        {% if isAsc == "True" %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                        {% else %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                        {% endif %}
+                    {% endif %}
+                </button>
+            </th>
+            <th>
+                <button type="submit" name="what" value="price" onclick="submitForm('price')">Price
+                    {% if what == "price" %}
+                        {% if isAsc == "True" %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                        {% else %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                        {% endif %}
+                    {% endif %}
+                </button>
+            </th>
+            <th>
+                <button type="submit" name="what" value="model" onclick="submitForm('model')">Year
+                    {% if what == "model" %}
+                        {% if isAsc == "True" %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                        {% else %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                        {% endif %}
+                    {% endif %}
+                </button>
+            </th>
+            <th>
+                <button type="submit" name="what" value="type" onclick="submitForm('type')">Type
+                    {% if what == "type" %}
+                        {% if isAsc == "True" %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                        {% else %}
+                            <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                        {% endif %}
+                    {% endif %}
+                </button>
+            </th>
+        </tr>
+        {% for car in cars %}
+        <tr>
+            <td><a href="{% url 'car_detail' car_id=car.id %}"><img src="{{ car.image.url }}" alt="Car Image" width="300" height="168"></a></td>
+            <td><a href="{% url 'car_detail' car.id %}">{{ car.name }}</a></td>
+            <td>{{car.price}}₺</td>
+            <td>{% load l10n %}{{car.model|unlocalize }}</td>
+            <td>{{car.type}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</form>
+
+<script type="text/javascript">
+    function submitForm(what) {
+        var preWhat = document.getElementById("what").value;
+        var preIsAsc = document.getElementById("isAsc").value;
+        document.getElementById("what").value = what;
+        document.getElementById("isAsc").value = preWhat == what ? (preIsAsc=="True" ? "False" : "True") : "True";
+        document.getElementById("form").submit();
+    }
+</script>
+{% endblock %}

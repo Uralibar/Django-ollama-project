@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block title %} Types {% endblock %}
+
+{% block content %}
+
+
+
+
+<form method="GET" action="{% url 'car_types' %}" id="form" class="car-form">
+    Price range: &nbsp;&nbsp;
+    <label for="min_price" class="custom-color"></label>
+    <input type="number" id="min_price" name="min_price" placeholder="min TL" value="{{ min_price }}" min="0" step="500000">
+    <b class="price-color">-</b>
+    <label for="quantity" class ="custom-color"></label>
+    <input type="number" id="quantity" name="max_price" placeholder="max TL" value="{{max_price}}" min="0" max="10000000" step="any"></br>
+
+    <input type="submit" value="Submit">
+    <button type="submit" name="reset" value="true">Reset</button>
+
+    <input type="hidden" id="what" name="what" value="{{what}}"/>
+    <input type="hidden" id="isAsc" name="isAsc" value="{{isAsc}}"/>
+    <input type="hidden" id="car_type" name="car_type" value="{{car_type}}"/>
+</form>
+
+<div>
+    <table>
+        <tr>
+            <th>Image</th>
+            <th><button onClick="submitForm('name')">Name
+                {% if what == "name" %}
+                    {% if isAsc == "True" %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                    {% else %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                    {% endif %}
+                {% endif %}</button></th>
+            <th><button onClick="submitForm('price')">Price
+                {% if what == "price" %}
+                    {% if isAsc == "True" %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                    {% else %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                    {% endif %}
+                {% endif %}</button></th>
+
+            <th><button onClick="submitForm('model')">Year
+                {% if what == "model" %}
+                    {% if isAsc == "True" %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/asc.png" width="16" height="16">
+                    {% else %}
+                        <img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/desc.png" width="16" height="16">
+                    {% endif %}
+                {% endif %}</button></th>
+            <th>Type</th>
+        </tr>
+        {% for car in cars %}
+        <tr>
+            <td><a href="{% url 'car_detail' car_id=car.id %}"><img src="{{ car.image.url }}" alt="Car Image" width="300" height="168"></a></td>
+            <td><a href="{% url 'car_detail' car.id %}">{{ car.name }}</a></td>
+            <td>{{car.price}}</td>
+            <td>{% load l10n %}{{car.model|unlocalize }}</td>
+            <td>{{car.type}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script type="text/javascript">
+    function submitForm(what) {
+        var preWhat = document.getElementById("what").value;
+        var preIsAsc = document.getElementById("isAsc").value;
+        document.getElementById("what").value = what;
+        document.getElementById("isAsc").value = preWhat == what ? (preIsAsc=="True" ? "False" : "True") : "True";
+        document.getElementById("form").submit();
+    }
+</script>
+
+
+{% endblock %}

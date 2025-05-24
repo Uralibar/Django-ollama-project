@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block title %} HomePage {% endblock %}
+
+{% block content %}
+<br>
+<h2>Favourites of 2024</h2>
+
+<div class="container">
+    <div class="row">
+        {% for car in cars %}
+                {% if car.top_seller == 1%}
+                <div class="col-sm-3">
+                    <h3>{{ car.name }}</h3>
+                  <div class="card">
+                      <a href="{% url 'car_detail' car.id %}" class="car-link"><img src={{car.image.url}} class="img-round" width="248" height="163"></a>
+                <div class="card-body pt-0 px-0">
+                  <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                    <small class="text-muted mt-1">STARTING AT</small>
+                    <h6>{{car.price}}₺</h6>
+                  </div>
+                  <hr class="mt-2 mx-3">
+                  <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                    <div class="d-flex flex-column"><span class="text-muted">Fuel Efficiency</span><small class="text-muted">L/100KM&ast;</small></div>
+                    <div class="d-flex flex-column"><h5 class="mb-0">{{car.fuel_efficiency}}</h5><small class="text-muted text-right">(city/Hwy)</small></div>
+                  </div>
+                  <div class="d-flex flex-row justify-content-between p-3 mid">
+                    <div class="d-flex flex-column"><small class="text-muted mb-1">ENGINE</small><div class="d-flex flex-row"><img src="https://imgur.com/iPtsG7I.png" width="35px" height="25px"><div class="d-flex flex-column ml-1"><small class="ghj">{{car.engine}}</small><small class="ghj">{{car.engine_id}}</small></div></div></div>
+                    <div class="d-flex flex-column"><small class="text-muted mb-2">HORSEPOWER</small><div class="d-flex flex-row"><img src="https://imgur.com/J11mEBq.png"><h6 class="ml-1">{{car.horsepower}}*</h6></div></div>
+                  </div>
+                  <div class="mx-3 mt-3 mb-2"><a href="{% url 'car_detail' car.id %}" class="car-link btn btn-danger btn-block"><large>More Information</large></a></div>
+                </div>
+                </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+    </div>
+</div>
+
+
+
+<h2>Types</h2>
+
+
+<form method="GET" action="{% url 'car_types' %}" id="form">
+    <input type="hidden" id ="car_type" name="car_type" value="{{car_type}}"/>
+</form>
+
+<div class="images-row">
+    <div class="type-button">
+        <h3>Hatchback</h3>
+            <button class="car-type" onClick="submitType('Hatchback')"><img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/Hatchback.png" width="275" height="183">
+</button>
+    </div>
+    <div class="type-button">
+        <h3>Sedan</h3>
+        <button class="car-type" onClick="submitType('Sedan')"><img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/Sedan.png" width="275" height="183">
+</button>
+    </div>
+    <div class="type-button">
+        <h3>Electric</h3>
+        <button class="car-type" onClick="submitType('Electric')"><img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/Electric.png" width="275" height="183">
+</button>
+    </div>
+    <div class="type-button">
+        <h3>Station Wagon</h3>
+        <button class="car-type" onClick="submitType('Station')"><img src="https://uralawsbucket.s3.eu-north-1.amazonaws.com/car_images/Station.png" width="275" height="183">
+</button>
+    </div>
+</div>
+<br>
+
+<script type="text/javascript">
+function submitType(car_type) {
+    document.getElementById("car_type").value = car_type;
+    document.getElementById("form").submit();
+}
+</script>
+
+
+
+
+{% endblock %}

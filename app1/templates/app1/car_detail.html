@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block title %} Car Information {% endblock %}
+
+{% block content %}
+
+<h1 class="h1-cardetail-color">{{ car.name }}</h1>
+<div class="car-info-container">
+    <div class="slideshow-container">
+        {% if car.image %}
+        <div class="mySlides">
+            <img src="{{ car.image.url }}" width="700" height="400">
+        </div>
+        {% endif %}
+
+        {% if car.image2 %}
+        <div class="mySlides">
+            <img src="{{ car.image2.url }}" width="700" height="400">
+        </div>
+        {% endif %}
+
+        {% if car.image3 %}
+        <div class="mySlides">
+            <img src="{{ car.image3.url }}" width="700" height="400">
+        </div>
+        {% endif %}
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <div class="car-details">
+        <p class="p-color car-detail car-detail-margin"><b>Price</b>: {{ car.price }}₺</p>
+        <p class="p-color car-detail"><b>Model</b>: {% load l10n %}{{ car.model|unlocalize }}</p>
+        <p class="p-color car-detail"><b>Color</b>: {{ car.color }}</p>
+        <p class="p-color car-detail"><b>Type</b>: {{ car.type }}</p>
+        <p class="p-color car-detail"><b>Engine</b>: {{ car.engine }}</p>
+        <p class="p-color car-detail"><b>Transmission</b>: {{ car.transmission }}</p>
+        <p class="p-color car-detail"><b>Fuel</b>: {{ car.fuel }}</p>
+        <p class="p-color car-detail"><b>Horsepower</b>: {{ car.horsepower }}</p>
+        <p class="p-color car-detail"><b>Fuel efficiency</b>: {{ car.fuel_efficiency }}</p>
+    </div>
+</div>
+
+
+        <p class="p-color car-detail car-desc"><b>Description</b>: {{ car.description|safe }}</p>
+
+
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function showSlides(n) {
+  let i;
+  let x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,8 @@
+Django>=3.2,<4.0
+Pillow>=8.0.0
+psycopg2-binary
+django-redis
+boto3
+django-storages
+ollama
+celery

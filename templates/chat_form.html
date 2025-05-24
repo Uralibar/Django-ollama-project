@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block title %} Chat {% endblock %}
+{% block content %}
+
+<!-- chat_form.html -->
+<div class="chat-form-container">
+    <form method="get" action="{% url 'chat_with_ollama' %}" class="chat-form">
+        <input type="text" name="user_request" placeholder="Type your car request (e.g., 'Show me a cheap family car')" required class="chat-input">
+        <button type="submit" class="chat-button">Submit</button>
+    </form>
+</div>
+
+
+{% endblock %}
