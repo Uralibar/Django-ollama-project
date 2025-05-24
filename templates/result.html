@@ -6,22 +6,14 @@
 {% block title %} Chat {% endblock %}
 {% block content %}
 
-<!-- result.html -->
-<h1>Cars Detected from Your Request</h1>
 
-<p><strong>Your Request:</strong> {{ user_request }}</p>
-<p><strong>Detected Car Type:</strong> {{ detected_types }}</p>
-<p><strong>Detected Price Range:</strong> {{ price_range }}</p>
 
-<h2>Cars of Type: {{ detected_types }}</h2>
+<div style="text-align: center; margin-top: 20px;">
+  <a href="{% url 'chat_with_ollama' %}" style="font-size: 24px; font-weight: bold;">
+    Ask again
+  </a>
+</div>
 
-<ul>
-    {% for car in cars %}
-        <li>{{ car.name }} - {{ car.price }} - {{ car.type }}</li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'chat_with_ollama' %}">Ask again</a>
 
 <form method="get" id="form" action="{% url 'chat_with_ollama' %}">
     <!-- Hidden inputs to store sorting parameters and user request -->
