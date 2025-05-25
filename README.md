@@ -8,16 +8,11 @@ cd Django-ollama-project
 docker-compose up --build
 
 ### 3. Access the Ollama container shell:
-For Linux/macOS users:
-docker exec -it $(
-  docker ps --filter "name=ollama" \
-  --format "{{.Names}}" | head -n 1
-) bash
+For Linux/macOS users: \
+docker exec -it $(docker ps --filter "name=ollama" --format "{{.Names}}" | head -n 1) /bin/bash  
 
-For Windows PowerShell users:
-$container = docker ps --filter "name=ollama" `
-  --format "{{.Names}}" | Select-Object -First 1
-docker exec -it $container bash
+For Windows PowerShell users: \
+docker exec -it $(docker ps --filter "name=ollama" --format "{{.Names}}" | Select-Object -First 1) bash  
 
 
 ### 4. Pull the model inside the container:
