@@ -9,9 +9,16 @@ docker-compose up --build
 
 ### 3. Access the Ollama container shell:
 For Linux/macOS users:
-docker exec -it $(docker ps --filter "name=ollama" --format "{{.Names}}" | head -n 1) bash
+docker exec -it $(
+  docker ps --filter "name=ollama" \
+  --format "{{.Names}}" | head -n 1
+) bash
+
 For Windows PowerShell users:
-docker exec -it $(docker ps --filter "name=ollama" --format "{{.Names}}" | Select-Object -First 1) bash
+$container = docker ps --filter "name=ollama" `
+  --format "{{.Names}}" | Select-Object -First 1
+docker exec -it $container bash
+
 
 ### 4. Pull the model inside the container:
 ollama pull gemma3:4b
